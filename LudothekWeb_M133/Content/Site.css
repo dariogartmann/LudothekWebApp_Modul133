@@ -17,7 +17,7 @@ body {
 .dl-horizontal dt {
     white-space: normal;
 }
-
+ 
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input[type="text"],
 input[type="password"],
