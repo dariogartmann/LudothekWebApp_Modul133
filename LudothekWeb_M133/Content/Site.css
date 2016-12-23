@@ -36,3 +36,10 @@ input[type="select"] {
         padding: 0;
     }
 }
+
+
+.rental, .game {
+    margin: 5px;
+    padding: 10px;
+    border-bottom: 1px solid #EBEBEB;
+}

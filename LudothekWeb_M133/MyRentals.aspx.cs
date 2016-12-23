@@ -18,10 +18,21 @@ namespace LudothekWeb_M133 {
             foreach (Rental rental in rentals) {
                 Game gameByRental = GameRepository.GetGames().First(g => g.Id == rental.GameId);
 
-                myRentals.InnerHtml += gameByRental;
+                myRentals.InnerHtml += RenderRental(gameByRental, rental);
             }
 
         }
+
+
+        private static string RenderRental(Game game, Rental rental) {
+            return "<div class=\"col-md-3 rental\">" +
+                        $"<h3>{game.Name}</h3>" +
+                        $"<p>From: {rental.StartDate.ToString("D")}</p>" +
+                        $"<p>To: {rental.EndDate.ToString("D")}</p>" +
+                        $"<a class=\"btn btn-primary\" href=\"/MyRentals.aspx?rentalId={rental.Id}\">Prolong</a>" +
+                    "</div>";
+        }
+
 
         #endregion
     }

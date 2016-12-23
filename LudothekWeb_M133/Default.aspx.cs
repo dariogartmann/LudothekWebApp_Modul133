@@ -2,6 +2,9 @@
 // SW Guideline: Technote Coding Guidelines Ver. 1.4
 
 using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using System.Web;
 using LudothekWeb_M133.Models;
 using LudothekWeb_M133.Pages;
@@ -11,16 +14,37 @@ namespace LudothekWeb_M133 {
         #region Methodes
 
         protected void Page_Load(object sender, EventArgs e) {
-            foreach (Game game in GameRepository.GetGames()) {
-                gamesList.InnerHtml += "<div><h3>" + game.Name + "</h3><a href=\"#\" OnClick=\"CreateRental("+game.Id+")\">Rent</a></div>";
+
+            var gameId = Request.QueryString["gameId"];
+
+            if (gameId != null) {
+                var selectedGame = GameRepository.GetGames().First(g => g.Id.ToString() == gameId);
+
+                if (selectedGame == null) {
+                    return;
+                }
+
+                if (RentalRepository.IsGameAvailable(selectedGame.Id)) {
+                    string username = HttpContext.Current.User.Identity.Name;
+                    RentalRepository.CreateRental(selectedGame.Id, username);
+                    Response.Redirect("~/MyRentals.aspx");
+                }
+
+            } else {
+                foreach (Game game in GameRepository.GetGames()) {
+                    if (RentalRepository.IsGameAvailable(game.Id)) {
+                        gamesList.InnerHtml += RenderGame(game);
+                    }
+                }
             }
         }
 
-        private void CreateRental(int gameId) {
-            if (RentalRepository.IsGameAvailable(gameId)) {
-                string username = HttpContext.Current.User.Identity.Name;
-                RentalRepository.CreateRental(gameId, username);
-            }
+        private static string RenderGame(Game game) {
+            return "<div class=\"col-md-3 game\">" +
+                        $"<h3>{game.Name}</h3>" +
+                        $"<p>Price: CHF {game.Price}</p>" +
+                        $"<a class=\"btn btn-primary\" href=\"/Default.aspx?gameId={game.Id}\">Rent game!</a>" +
+                    "</div>";
         }
 
         #endregion
