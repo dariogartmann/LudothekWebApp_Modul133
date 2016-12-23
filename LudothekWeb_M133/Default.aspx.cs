@@ -1,23 +1,28 @@
-﻿using LudothekWeb_M133.Models;
-using LudothekWeb_M133.Storage;
+﻿// (C) IMT - Information Management Technology AG, CH-9470 Buchs, www.imt.ch.
+// SW Guideline: Technote Coding Guidelines Ver. 1.4
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using LudothekWeb_M133.Models;
+using LudothekWeb_M133.Pages;
 
 namespace LudothekWeb_M133 {
-    public partial class _Default : Page {
-        protected void Page_Load(object sender, EventArgs e)
-        {
+    public partial class _Default : SecurePageBase {
+        #region Methodes
 
-            GameRepository gameRepository = new GameRepository(Server.MapPath("Storage/GameData.json"));
-
-            foreach (Game game in gameRepository.GetGames())
-            {
-                gamesList.InnerHtml += "<h1>" + game.Name + "</h1>";
+        protected void Page_Load(object sender, EventArgs e) {
+            foreach (Game game in GameRepository.GetGames()) {
+                gamesList.InnerHtml += "<div><h3>" + game.Name + "</h3><a href=\"#\" OnClick=\"CreateRental("+game.Id+")\">Rent</a></div>";
             }
         }
+
+        private void CreateRental(int gameId) {
+            if (RentalRepository.IsGameAvailable(gameId)) {
+                string username = HttpContext.Current.User.Identity.Name;
+                RentalRepository.CreateRental(gameId, username);
+            }
+        }
+
+        #endregion
     }
 }

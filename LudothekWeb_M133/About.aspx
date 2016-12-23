@@ -2,6 +2,8 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2><%: Title %>.</h2>
-    <h3>Your application description page.</h3>
-    <p>Use this area to provide additional information.</p>
+    <h3>Ludothek Spielgut</h3>
+    <p>Diese Webapplikation ist Teil der Abschlussarbeit für Modul 133 an der GBS St.Gallen. Ziel der Arbeit war die Implementation einer Webapplikation für eine Ludothek basierend auf ASP.NET WebForms</p>
+    <p>&copy; 2016 Dario Gartmann</p>
+
 </asp:Content>
