@@ -305,3 +305,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+LudothekWeb_M133/Storage/rentals.json
+LudothekWeb_M133/Storage/games.json
