@@ -7,6 +7,10 @@
 *.userosscache
 *.sln.docstates
 
+# don't keep data in repository
+LudothekWeb_M133/Storage/rentals.json
+LudothekWeb_M133/Storage/games.json
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
