@@ -29,6 +29,7 @@ namespace LudothekWeb_M133 {
                         $"<h3>{game.Name}</h3>" +
                         $"<p>From: {rental.StartDate.ToString("D")}</p>" +
                         $"<p>To: {rental.EndDate.ToString("D")}</p>" +
+                        $"<a class=\"btn btn-secondary\" href=\"/MyRentals.aspx?rentalId={rental.Id}\">Cancel</a>" +
                         $"<a class=\"btn btn-primary\" href=\"/MyRentals.aspx?rentalId={rental.Id}\">Prolong</a>" +
                     "</div>";
         }
