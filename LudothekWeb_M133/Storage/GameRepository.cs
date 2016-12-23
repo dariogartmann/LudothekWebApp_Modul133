@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using LudothekWeb_M133.Models;
 using Newtonsoft.Json;
@@ -12,6 +13,8 @@ namespace LudothekWeb_M133.Storage {
         #region Properties
 
         public string DataPath { get; set; }
+        
+        private List<Game> AllGames { get; set; }
 
         #endregion
 
@@ -24,6 +27,8 @@ namespace LudothekWeb_M133.Storage {
             if (!File.Exists(DataPath)) {
                 CreateSampleFile();
             }
+
+            AllGames = ReadGamesFromFile();
         }
 
         #endregion
@@ -42,9 +47,13 @@ namespace LudothekWeb_M133.Storage {
             File.WriteAllText(DataPath, json, Encoding.Unicode);
         }
 
-        public List<Game> GetGames() {
+        public List<Game> ReadGamesFromFile() {
             var json = File.ReadAllText(DataPath);
             return JsonConvert.DeserializeObject<List<Game>>(json);
+        }
+
+        public List<Game> AvailableGames() {
+            return AllGames;
         }
 
         #endregion

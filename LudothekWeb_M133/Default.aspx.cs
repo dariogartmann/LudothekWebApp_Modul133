@@ -18,7 +18,7 @@ namespace LudothekWeb_M133 {
             var gameId = Request.QueryString["gameId"];
 
             if (gameId != null) {
-                var selectedGame = GameRepository.GetGames().First(g => g.Id.ToString() == gameId);
+                var selectedGame = GameRepository.ReadGamesFromFile().First(g => g.Id.ToString() == gameId);
 
                 if (selectedGame == null) {
                     return;
@@ -31,7 +31,7 @@ namespace LudothekWeb_M133 {
                 }
 
             } else {
-                foreach (Game game in GameRepository.GetGames()) {
+                foreach (Game game in GameRepository.ReadGamesFromFile()) {
                     if (RentalRepository.IsGameAvailable(game.Id)) {
                         gamesList.InnerHtml += RenderGame(game);
                     }
@@ -43,7 +43,7 @@ namespace LudothekWeb_M133 {
             return "<div class=\"col-md-3 game\">" +
                         $"<h3>{game.Name}</h3>" +
                         $"<p>Price: CHF {game.Price}</p>" +
-                        $"<a class=\"btn btn-primary\" href=\"/Default.aspx?gameId={game.Id}\">Rent game!</a>" +
+                        $"<a class=\"btn btn-primary\" href=\"/Default.aspx?gameId={game.Id}\">Rent game!</a><hr/>" +
                     "</div>";
         }
 

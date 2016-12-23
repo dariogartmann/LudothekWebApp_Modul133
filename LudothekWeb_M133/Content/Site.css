@@ -39,7 +39,5 @@ input[type="select"] {
 
 
 .rental, .game {
-    margin: 5px;
     padding: 10px;
-    border-bottom: 1px solid #EBEBEB;
 }

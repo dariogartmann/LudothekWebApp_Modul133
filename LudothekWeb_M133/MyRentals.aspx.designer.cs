@@ -13,12 +13,21 @@ namespace LudothekWeb_M133 {
     public partial class MyRentals {
         
         /// <summary>
-        /// myRentals control.
+        /// myActiveRentals control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl myRentals;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl myActiveRentals;
+        
+        /// <summary>
+        /// myPastRentals control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl myPastRentals;
     }
 }

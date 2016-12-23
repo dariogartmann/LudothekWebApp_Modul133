@@ -12,26 +12,57 @@ namespace LudothekWeb_M133 {
     public partial class MyRentals : SecurePageBase {
         #region Methodes
 
+        private string m_currentUser;
+
         protected void Page_Load(object sender, EventArgs e) {
-            List<Rental> rentals = RentalRepository.GetRentalsForUser(HttpContext.Current.User.Identity.Name);
+            m_currentUser = HttpContext.Current.User.Identity.Name;
 
-            foreach (Rental rental in rentals) {
-                Game gameByRental = GameRepository.GetGames().First(g => g.Id == rental.GameId);
+            var prolongRentalId = Request.QueryString["prolong"];
+            var cancelRentalId = Request.QueryString["cancel"];
 
-                myRentals.InnerHtml += RenderRental(gameByRental, rental);
+            if (prolongRentalId != null) {
+                // prolong btn clicked
+                int id = Int32.Parse(prolongRentalId);
+                RentalRepository.ProlongRental(id, m_currentUser);
+                Response.Redirect("/MyRentals.aspx");
+            } else if (cancelRentalId != null) {
+                // cancel btn clicked
+                int id = Int32.Parse(cancelRentalId);
+                RentalRepository.CancelRental(id, m_currentUser);
+                Response.Redirect("/MyRentals.aspx");
+            } else {
+                // read all rentals of user
+                List<Rental> rentals = RentalRepository.GetRentalsForUser(m_currentUser);
+
+                foreach (Rental rental in rentals) {
+                    Game gameByRental = GameRepository.ReadGamesFromFile().First(g => g.Id == rental.GameId);
+
+                    // write games to html, sort by availability
+                    if (rental.IsActive) {
+                        myActiveRentals.InnerHtml += RenderRental(gameByRental, rental, rental.IsActive);
+                    } else {
+                        myPastRentals.InnerHtml += RenderRental(gameByRental, rental, rental.IsActive);
+                    }
+
+                }
             }
-
         }
 
-
-        private static string RenderRental(Game game, Rental rental) {
-            return "<div class=\"col-md-3 rental\">" +
-                        $"<h3>{game.Name}</h3>" +
-                        $"<p>From: {rental.StartDate.ToString("D")}</p>" +
-                        $"<p>To: {rental.EndDate.ToString("D")}</p>" +
-                        $"<a class=\"btn btn-secondary\" href=\"/MyRentals.aspx?rentalId={rental.Id}\">Cancel</a>" +
-                        $"<a class=\"btn btn-primary\" href=\"/MyRentals.aspx?rentalId={rental.Id}\">Prolong</a>" +
-                    "</div>";
+        private static string RenderRental(Game game, Rental rental, bool active) {
+            if (active) {
+                return $"<div class=\"col-md-3 rental\">" +
+                       $"<h3>{game.Name}</h3>" +
+                       $"<p>From: {rental.StartDate.ToString("D")}</p>" +
+                       $"<p>To: {rental.EndDate.ToString("D")}</p>" +
+                       $"<a class=\"btn btn-secondary\" href=\"/MyRentals.aspx?cancel={rental.Id}\">Cancel</a>" +
+                       $"<a class=\"btn btn-primary\" href=\"/MyRentals.aspx?prolong={rental.Id}\">Prolong</a><hr/>" +
+                       "</div>";
+            } 
+            return $"<div class=\"col-md-3 rental\">" +
+                    $"<h3>{game.Name}</h3>" +
+                    $"<p>From: {rental.StartDate.ToString("D")}</p>" +
+                    $"<p>To: {rental.EndDate.ToString("D")}</p><hr/>" +
+                "</div>";
         }
 
 
